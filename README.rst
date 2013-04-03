@@ -9,6 +9,6 @@ QQ开放平台oauth2 python sdk
 
 打开try_it.py来修改你的API_ID和API_KEY以及回调URL
 
-使用python try.py来测试
+使用python try_it.py来测试
 
 更多使用方法请参照：https://github.com/michaelliao/sinaweibopy
