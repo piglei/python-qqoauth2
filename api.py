@@ -164,8 +164,11 @@ def _http_call(_url, method, authorization, **kw):
         body = FancyDict(json.loads(body))
     except:
         body = body
-    if not isinstance(body, basestring) and 'error' in body:
-        raise QQAPIError(body.error, getattr(body, 'error_description', ''))
+    if not isinstance(body, basestring):
+        if 'error' in body:
+            raise QQAPIError(body.error, getattr(body, 'error_description', ''))
+        if 'ret' in body and body.ret != 0:
+            raise QQAPIError(body.ret, getattr(body, 'msg', ''))
     return body
 
 class HttpObject(object):
@@ -278,8 +281,7 @@ class APIClient(object):
         """
         if not self.openid:
             if self.is_expires():
-                return None
-                #raise QQBaseException('Your muse set a correct access token to request an openid')
+                raise QQBaseException('Your muse set a correct access token to request an openid')
             ret = _http_get('%s%s' % (self.auth_url, 'me'), authorization = self.access_token)
             self.openid = ret.openid
         return self.openid
